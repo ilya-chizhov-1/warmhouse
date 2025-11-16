@@ -1,0 +1,444 @@
+openapi: 3.0.3
+info:
+  title: Smart Home Sensors API
+  description: API для управления датчиками умного дома
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Локальный сервер разработки
+
+paths:
+  /sensors/{id}:
+    get:
+      summary: Получение информации об устройстве
+      description: Возвращает полную информацию о датчике по его идентификатору
+      operationId: getSensorById
+      tags:
+        - Sensors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор датчика
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Успешное получение информации о датчике
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+              examples:
+                success:
+                  summary: Успешный ответ
+                  value:
+                    id: 1
+                    name: "Living Room Temperature"
+                    type: "temperature"
+                    location: "Living Room"
+                    value: 22.5
+                    unit: "°C"
+                    status: "active"
+                    last_updated: "2024-01-15T10:30:00Z"
+                    created_at: "2024-01-10T08:00:00Z"
+        "400":
+          description: Неверный формат идентификатора
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                badRequest:
+                  summary: Ошибка валидации
+                  value:
+                    error: "Invalid sensor ID"
+        "404":
+          description: Датчик не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notFound:
+                  summary: Датчик не найден
+                  value:
+                    error: "Sensor not found"
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                serverError:
+                  summary: Ошибка сервера
+                  value:
+                    error: "Internal server error"
+
+  /sensors/{id}/value:
+    patch:
+      summary: Обновление состояния устройства
+      description: Обновляет значение и статус датчика
+      operationId: updateSensorValue
+      tags:
+        - Sensors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор датчика
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SensorValueUpdate"
+            examples:
+              updateValue:
+                summary: Обновление значения и статуса
+                value:
+                  value: 23.5
+                  status: "active"
+              updateStatus:
+                summary: Изменение статуса
+                value:
+                  value: 22.0
+                  status: "inactive"
+      responses:
+        "200":
+          description: Значение датчика успешно обновлено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+              examples:
+                success:
+                  summary: Успешное обновление
+                  value:
+                    message: "Sensor value updated successfully"
+        "400":
+          description: Неверный формат запроса
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                badRequest:
+                  summary: Ошибка валидации
+                  value:
+                    error: "Key: 'SensorValueUpdate.Value' Error:Field validation for 'Value' failed on the 'required' tag"
+        "404":
+          description: Датчик не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notFound:
+                  summary: Датчик не найден
+                  value:
+                    error: "Sensor not found"
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                serverError:
+                  summary: Ошибка сервера
+                  value:
+                    error: "Internal server error"
+
+  /sensors/temperature/{location}:
+    get:
+      summary: Получение температуры по локации
+      description: Запрашивает текущую температуру для указанной локации
+      operationId: getTemperatureByLocation
+      tags:
+        - Temperature
+      parameters:
+        - name: location
+          in: path
+          required: true
+          description: Название комнаты/локации
+          schema:
+            type: string
+            enum:
+              - "Living Room"
+              - "Bedroom"
+              - "Kitchen"
+            example: "Living Room"
+      responses:
+        "200":
+          description: Успешное получение данных о температуре
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemperatureData"
+              examples:
+                success:
+                  summary: Успешный ответ
+                  value:
+                    location: "Living Room"
+                    value: 22.5
+                    unit: "°C"
+                    status: "active"
+                    timestamp: "2024-01-15T10:30:00Z"
+                    description: "Current temperature in Living Room"
+        "400":
+          description: Неверный параметр локации
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                badRequest:
+                  summary: Ошибка валидации
+                  value:
+                    error: "Location is required"
+        "500":
+          description: Ошибка при получении данных о температуре
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                serverError:
+                  summary: Ошибка сервера
+                  value:
+                    error: "Failed to fetch temperature data: connection timeout"
+
+  /sensors:
+    post:
+      summary: Создание нового устройства
+      description: Создает новый датчик в системе умного дома
+      operationId: createSensor
+      tags:
+        - Sensors
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SensorCreate"
+            examples:
+              createTemperatureSensor:
+                summary: Создание датчика температуры
+                value:
+                  name: "Living Room Temperature"
+                  type: "temperature"
+                  location: "Living Room"
+                  unit: "°C"
+              createSensorMinimal:
+                summary: Минимальные данные для создания
+                value:
+                  name: "Bedroom Sensor"
+                  type: "temperature"
+                  location: "Bedroom"
+      responses:
+        "201":
+          description: Датчик успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+              examples:
+                created:
+                  summary: Успешно создан
+                  value:
+                    id: 1
+                    name: "Living Room Temperature"
+                    type: "temperature"
+                    location: "Living Room"
+                    value: 0
+                    unit: "°C"
+                    status: "inactive"
+                    last_updated: "2024-01-15T10:30:00Z"
+                    created_at: "2024-01-15T10:30:00Z"
+        "400":
+          description: Неверный формат данных запроса
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                badRequest:
+                  summary: Ошибка валидации
+                  value:
+                    error: "Key: 'SensorCreate.Name' Error:Field validation for 'Name' failed on the 'required' tag"
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                serverError:
+                  summary: Ошибка сервера
+                  value:
+                    error: "Internal server error"
+
+components:
+  schemas:
+    Sensor:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - location
+        - value
+        - unit
+        - status
+        - last_updated
+        - created_at
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор датчика
+          example: 1
+        name:
+          type: string
+          description: Название датчика
+          example: "Living Room Temperature"
+        type:
+          type: string
+          enum:
+            - temperature
+          description: Тип датчика
+          example: "temperature"
+        location:
+          type: string
+          description: Локация датчика
+          example: "Living Room"
+        value:
+          type: number
+          format: float
+          description: Текущее значение датчика
+          example: 22.5
+        unit:
+          type: string
+          description: Единица измерения
+          example: "°C"
+        status:
+          type: string
+          description: Статус датчика
+          enum:
+            - active
+            - inactive
+            - error
+          example: "active"
+        last_updated:
+          type: string
+          format: date-time
+          description: Время последнего обновления
+          example: "2024-01-15T10:30:00Z"
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания
+          example: "2024-01-10T08:00:00Z"
+
+    SensorCreate:
+      type: object
+      required:
+        - name
+        - type
+        - location
+      properties:
+        name:
+          type: string
+          description: Название датчика
+          example: "Living Room Temperature"
+        type:
+          type: string
+          enum:
+            - temperature
+          description: Тип датчика
+          example: "temperature"
+        location:
+          type: string
+          description: Локация датчика
+          example: "Living Room"
+        unit:
+          type: string
+          description: Единица измерения
+          example: "°C"
+
+    SensorValueUpdate:
+      type: object
+      required:
+        - value
+        - status
+      properties:
+        value:
+          type: number
+          format: float
+          description: Новое значение датчика
+          example: 23.5
+        status:
+          type: string
+          description: Новый статус датчика
+          enum:
+            - active
+            - inactive
+            - error
+          example: "active"
+
+    TemperatureData:
+      type: object
+      required:
+        - location
+        - value
+        - unit
+        - status
+        - timestamp
+      properties:
+        location:
+          type: string
+          description: Название локации
+          example: "Living Room"
+        value:
+          type: number
+          format: float
+          description: Значение температуры
+          example: 22.5
+        unit:
+          type: string
+          description: Единица измерения
+          example: "°C"
+        status:
+          type: string
+          description: Статус датчика
+          example: "active"
+        timestamp:
+          type: string
+          format: date-time
+          description: Время получения данных
+          example: "2024-01-15T10:30:00Z"
+        description:
+          type: string
+          description: Описание данных
+          example: "Current temperature in Living Room"
+
+    SuccessMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Сообщение об успешной операции
+          example: "Sensor value updated successfully"
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Описание ошибки
+          example: "Sensor not found"
