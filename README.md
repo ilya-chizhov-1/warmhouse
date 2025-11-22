@@ -31,9 +31,9 @@
 ### 3. Определение доменов и границы контекстов
 
 - Sensors: получают данные от сервера и управляют отоплением.
-- Home: запрос температуры и управление отоплением.
-- System: управляет сенсорами, взаимодействует с пользователем.
-- Service Engineer: подключает и настраивает оборудование.
+- Customer: запрос температуры и управление отоплением.
+- Telemetry: управляет сенсорами, взаимодействует с пользователем.
+- Support: подключает и настраивает оборудование.
 
 ### 4. Визуализация контекста системы — диаграмма С4
 
@@ -45,7 +45,7 @@
 
 **Диаграмма контейнеров (Containers)**
 
-[Containers](https://www.plantuml.com/plantuml/uml/ZLNDJXiz5DtdAUwNLP02sNohhlWfg0kGA4F54Zc9HQ9cVcHxcgAsKa9AgPIgI5rrrrPzWO106Gg4Lx3VgCUU38o6QTKDyRs-zvpZwpDcMIecLEptAlzrWrOlRdFgA1N99us6OFsbWwxgnCrOSj4A0yK3jTGA_KRKOu7jMPIgtUis6sl_BsxRr8kjpORFfE82gVqrTB1kmCLIPF4hsrp8CAXrGf-7VQJhL7sMhQi8z3SzqzVcavxYzrnFp96-j36PeKxCq8KtPbnTg7Y7uF3trr-hckI132sKvnROp7PNmpXeCt5OwpFXTqAS0LLxsPeynhpg0hsf4DqBhVLvSoMAKBSXt77Rv6slE6rVzQqLO0RcFMHScI7f2uWx9NrNgleKIlB8JTPw2RoDK3XeGAwc6KAACZf7zKLFzBLEW3yn7tHYEQP8tPc1dfcXPQaJudCmpP1BiEiA_oAcxdQ0-0lHPtE2x2qQBqadP4OE6e1WpVBWmTAokQqRdHJEm-HXqFAuUDLjsRcks91a6bCVhY6VIyaEE3L5Y8EcD_mTM6Tw1baJK90xpPaP8uPwoqBu0vrcvBHS5KZzi1tt-0FhbejbnkieVjXBmbaIYp_8-CmOP3dmZEr2px2O57ZQJB4cSuPvkcfHKvU1I365R0n2MIVhP5bedLTc6ZDV5ZH2mCXyr1DeFIfCWQoiEtU8IyXBIx1n_EXEmFokalyMy1jnmLGiSZFQVKZIF8l6oWxlvR_4U-FhdoLkoCQKpYmfTuT5p60UktrdtTkbjxJ7czBQGSqR7XNcHkyztymz2wEyQ-rSRg5WZB4WCoLzXipKZEjaZj9F05QVaJb1EE_w4sF1oMbPmT_5fgoiuCX_mYgqb1SLRMGzapT9_WQmSJu7ARQbSSw5aGXLs0fxPV9BXmzQS-nkENiOa1Ywf-VKfQxAeKgyM7gLwQi-DppUAsmEt1k_Z7dZtyPl)
+[Containers](https://www.plantuml.com/plantuml/uml/ZLJBJXin5DtdAswp2b8Wcwwwub5G5o1HXeebSXABH9r7DFOqHMsbF4gfbAf8NNNNLls1W40C3y8ls7_KOsS61XEaRfAvr_UUStnzx4KXMIoJm2yzQuSDFsboQadP4IzgjPXr5_RQifNK4y7ZHXHA7ig5HXJKEZuBJS-ya4s_NQ-jF9_VDAat6-krW0d9OwHsLz31sY6F5pe6lxJ9On65bLOKyAYBT9NAh_BlCWBrIqtKbVwcpl5_eiPweCvCJBglKjstuRKUbUTAtZuuWjtLzx8YU2WY0-NP3opcgyjH4ZPPl5_fiZXeHTW3gdRoR_8OyyfpzA54T2UqqkNrfKu7TMkntMwJlCqbg-sdkZ42T4z_XemBtITr2d57f6vdgZw2aY9odJNU0cyjYYqq89Ud6KAASZfBzKEDrPLAWJ_MNrHgECwHkjKzDT5zmr8bn2TWcY2NOZKlV4fCrQu0yHBHTts8x0qQpqYbf8SM6e1WpVFWmQTXiqlNAdNsmyH-sF1u_AxTC7DTCY69QKnTk8O2BWJRurIF8snqUiA_WNKCp84QWuBiRexr237K6nR23tJgeTLouP06KJFn-JthXer5pcif_fX3mbvIWz_B-VG8P0NmdErKJV0nTdYQJB8wiuPvkMnGfou3aMGIMNCVH9MCauNJcbNc6dDVkXglz51_LMDe7JXJ82FhrcxYJ9rc9LWuU7GcOFvKAju5_7Tup6GI5sQqVP-aB6ikoHRtYpVnplZgxmmtv6EQpYoTxGw3cCCyTllMghTD7sc7ruMnWymQ7XKMHk-zNYyy2yEYQyrSRg1WXB6O2q3g69bpFQgI7cHNu59DI1yYpBgUOdISd9KzpBfDUPdZoF_2Sbfc5xasWcUA9dbu0hZg6OZRvhoEWZfn9AD6vC-IFtFueDK7vfIpqLlAldrwZcpg8eDopUUEO_P9JX_rpEzuhh3Oiq_y8iQT1Fu_)
 
 **Диаграмма компонентов (Components)**
 
@@ -67,18 +67,26 @@
 
 ### 1. Тип API
 
-Для взаимодействия микросервисов используется **REST API** (HTTP/JSON).
+Для взаимодействия микросервисов используется комбинация:
+
+**REST API (HTTP/JSON)** — для синхронных запросов:
+
+**AsyncAPI (Kafka)** — для асинхронного обмена событиями:
 
 **Обоснование решения:**
 
-- REST API является стандартным и широко используемым подходом для синхронного взаимодействия микросервисов
-- Подходит для синхронных запросов, где требуется немедленный ответ (например, получение температуры)
+- REST API является стандартным и широко используемым подходом для синхронного взаимодействия микросервисов, подходит для синхронных запросов, где требуется немедленный ответ
+- Kafka обеспечивает надёжную доставку событий и масштабирование сервисов. Позволяет обрабатывать большой поток телеметрии от тысяч датчиков без блокировки основных сервисов. Поддерживает replay событий при сбоях.
 
 ### 2. Документация API
 
 #### REST API (OpenAPI/Swagger)
 
 Документация REST API находится в файле `apps/smart_home/api-docs.yaml`.
+
+#### AsyncAPI (Kafka)
+
+Документация ASYNC API находится в файле `apps/smart_home/async-api.yaml`.
 
 # Задание 5. Работа с docker и docker-compose
 

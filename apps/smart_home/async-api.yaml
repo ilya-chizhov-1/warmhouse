@@ -1,0 +1,98 @@
+asyncapi: 3.0.0
+info:
+  title: Example Async API
+  version: 1.0.0
+  description: Асинхронное API
+
+servers:
+  kafka:
+    host: localhost:9092
+    protocol: kafka
+    description: Kafka broker
+
+channels:
+  telemetry-data:
+    address: telemetry-data
+    messages:
+      telemetryEvent:
+        $ref: "#/components/messages/TelemetryEvent"
+    description: Example topic
+
+operations:
+  sendTelemetry:
+    action: send
+    channel:
+      $ref: "#/channels/telemetry-data"
+    summary: Отправка телеметрии
+    description: Sensors Service публикует данные телеметрии в топик
+    messages:
+      - $ref: "#/channels/telemetry-data/messages/telemetryEvent"
+
+components:
+  messages:
+    TelemetryEvent:
+      name: TelemetryEvent
+      title: Telemetry Event
+      summary: Событие с данными телеметрии от датчика
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/TelemetryPayload"
+      examples:
+        - name: temperatureTelemetry
+          summary: Пример температурной телеметрии
+          payload:
+            sensor_id: "1"
+            sensor_type: "temperature"
+            location: "Living Room"
+            value: 22.5
+            unit: "°C"
+            status: "active"
+            timestamp: "2024-01-15T10:30:00Z"
+
+  schemas:
+    TelemetryPayload:
+      type: object
+      required:
+        - sensor_id
+        - sensor_type
+        - value
+        - timestamp
+      properties:
+        sensor_id:
+          type: string
+          description: Идентификатор датчика
+          example: "1"
+        sensor_type:
+          type: string
+          enum:
+            - temperature
+            - humidity
+            - motion
+          description: Тип датчика
+          example: "temperature"
+        location:
+          type: string
+          description: Локация датчика
+          example: "Living Room"
+        value:
+          type: number
+          format: float
+          description: Значение показания
+          example: 22.5
+        unit:
+          type: string
+          description: Единица измерения
+          example: "°C"
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - error
+          description: Статус датчика
+          example: "active"
+        timestamp:
+          type: string
+          format: date-time
+          description: Время снятия показания
+          example: "2024-01-15T10:30:00Z"
